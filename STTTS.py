@@ -1,31 +1,46 @@
-import speech_recognition as sr 
-import pyttsx 
-   
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Dec 28 10:27:47 2017
 
-for index, name in enumerate(sr.Microphone.list_microphone_names()):
-    print("Microphone with name \"{1}\" found for `Microphone(device_index={0})`".format(index, name))
+@author: Nishad Mandlik
+"""
 
-# obtain audio from the microphone  
-r = sr.Recognizer()
-engine = pyttsx.init()
-engine.setProperty("rate", 120)
+print ("Please Wait")
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import os
+from time import sleep
+import pyttsx
 
-with sr.Microphone() as source:
-    r.adjust_for_ambient_noise(source)  
-    print("Say something!")  
-    audio = r.listen(source)
-   
- # recognize speech using Sphinx 
-print ("Done Recording. Analysing Your Speech . . . \n") 
+TTS = pyttsx.init()
+pwd = os.path.dirname(__file__)
 
-speech = r.recognize_google(audio)
+chrOpts = webdriver.ChromeOptions()
+chrOpts.add_argument("--use-fake-ui-for-media-stream")
 
-try:  
-    print("This is perhaps what you said '" + speech + "'")  
-except sr.UnknownValueError:  
-    print("Sorry, couldn't recognize the speech. Please try again.")  
-except sr.RequestError as e:  
-    print("Error; {0}".format(e))
+fireProf = webdriver.FirefoxProfile(pwd + "/Firefox Profile")
+
+#driver = webdriver.Firefox(firefox_profile = fireProf, executable_path = pwd + '/geckodriver')
+driver = webdriver.Chrome(executable_path = pwd + '/chromedriver', chrome_options = chrOpts)
+
+driver.get("https://mandliksg.000webhostapp.com")
+
+while (driver.title != "Recording") :
+    sleep(1)
+
+print ("Recording")
+while (driver.title != "Done") :
+    sleep(1)
     
-engine.say(speech)
-engine.runAndWait()
+print ("Done")
+  
+STT = driver.find_element_by_id("confm").text
+driver.close()
+
+TTS.say(STT)
+TTS.runAndWait()
+
+
+
+
