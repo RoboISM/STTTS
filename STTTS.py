@@ -12,17 +12,20 @@ from selenium import webdriver
 import os
 from time import sleep
 
-pwd = os.path.dirname(__file__)
+pwd = os.path.dirname(os.path.abspath(__file__))
 
 chrOpts = webdriver.ChromeOptions()
 chrOpts.add_argument("--use-fake-ui-for-media-stream")
 
-os.system('espeak "Start speaking after the beep"')
+os.system("jack_control start")
+os.system("sudo amixer cset numid=3 1")
 
-#fireProf = webdriver.FirefoxProfile(pwd + "/Firefox Profile")
+os.system('espeak "Please start speaking after the beep"')
 
-driver = webdriver.Chrome(executable_path = pwd + '/chromedriver', chrome_options = chrOpts)
-#driver = webdriver.Firefox(firefox_profile = fireProf, executable_path = pwd + '/geckodriver')
+fireProf = webdriver.FirefoxProfile(pwd + "/Firefox Profile")
+
+driver = webdriver.Chrome(executable_path = pwd + "/chromedriver", chrome_options = chrOpts)
+driver = webdriver.Firefox(firefox_profile = fireProf, firefox_binary = '/usr/bin/firefox', executable_path = pwd + '/geckodriver')
 
 driver.get("https://mandliksg.000webhostapp.com")
 
@@ -42,6 +45,5 @@ print (STT)
 driver.close()
 
 os.system('espeak "' + STT + '"')
-
 
 
