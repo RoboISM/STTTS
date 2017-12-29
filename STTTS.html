@@ -30,20 +30,28 @@ if ('webkitSpeechRecognition' in window) {
   recognition.onresult = function(event) {
     var diceySTT = '';
     for (var i = event.resultIndex; i < event.results.length; ++i) {
-    	word = event.results[i][0].transcript;
-    	if (word.toUpperCase()==stopCom)
-    	{
-    		recognition.abort();
+      word = event.results[i][0].transcript;
+      if (word.toUpperCase()==stopCom)
+      {
+        
         confmSTT += dicey.innerHTML;
         confm.innerHTML = linebreak(confmSTT);
         document.title = "Done";
-    	}
-  		if (event.results[i].isFinal) {
-  		  confmSTT += word;
-  		} 
-  		else {
-  		  diceySTT += word;
-  		}
+      }
+      if (event.results[i].isFinal) {
+        confmSTT += word;
+      } 
+      else {
+        diceySTT += word;
+      }
+    }
+    var confWords = confmSTT.split(" ");
+    var confLast = confWords[confWords.length - 1];
+    if (confLast.toUpperCase()==stopCom)
+    {
+      recognition.abort();
+      confmSTT = confmSTT.substr(0, confmSTT.lastIndexOf("aptop")-2);
+      document.title = "Done";
     }
     confmSTT = capitalize(confmSTT);
     confm.innerHTML = linebreak(confmSTT);
@@ -51,7 +59,7 @@ if ('webkitSpeechRecognition' in window) {
   };
 
   recognition.onspeechend = function(event) {
-  	recognition.stop();
+    recognition.stop();
     document.title = "Done";
   };
 }
