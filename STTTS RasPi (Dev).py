@@ -48,3 +48,14 @@ TabSTT.set_url("https://mandliksg.000webhostapp.com")
 WelcTh.join()
 os.system("aplay " + pwd + "/Beep.wav")
 
+while True:
+    sleep(1)
+    PagSour=TabSTT.html
+    if (PagSour[PagSour.find("<title>")+7:PagSour.find("</title>")]=="Done"):
+        break
+
+PagSour=TabSTT.html
+STT = PagSour[PagSour.find('<span id="confm">')+17 : PagSour.find("</span><span>")]
+krom.close_tab(TabSTT)
+print(STT)
+#os.system('espeak "' + STT + '"')
