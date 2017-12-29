@@ -21,6 +21,8 @@ print ("Please Wait . . .")
 WelcTh = Thread(target=WelMes)
 WelcTh.start()
 
+os.system("jack_control start")
+os.system("sudo amixer cset numid=3 1")
 pwd = os.path.dirname(os.path.abspath(__file__))
 
 BrowTh = Thread(target=BrowSt)

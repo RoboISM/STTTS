@@ -25,7 +25,7 @@ os.system('espeak "Please start speaking after the beep"')
 fireProf = webdriver.FirefoxProfile(pwd + "/Firefox Profile")
 
 driver = webdriver.Chrome(executable_path = pwd + "/chromedriver", chrome_options = chrOpts)
-driver = webdriver.Firefox(firefox_profile = fireProf, firefox_binary = '/usr/bin/firefox', executable_path = pwd + '/geckodriver')
+#driver = webdriver.Firefox(firefox_profile = fireProf, firefox_binary = '/usr/bin/firefox', executable_path = pwd + '/geckodriver')
 
 driver.get("https://mandliksg.000webhostapp.com")
 
