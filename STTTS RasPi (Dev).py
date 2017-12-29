@@ -27,9 +27,22 @@ pwd = os.path.dirname(os.path.abspath(__file__))
 
 BrowTh = Thread(target=BrowSt)
 BrowTh.start()
-sleep(1)
+launchAttempts = 0
+while (launchAttempts<20):
+    try:        
+        sleep(1)
+        launchAttempts = launchAttempts + 1
+        krom = Chromote()
+    except :
+        continue
+    break
 
-krom = Chromote()
+if (launchAttempts==20):
+    WelcTh.join()
+    ErrMes = "Maximum Attempts Reached. Your Browser Has Either Not Started Or Has Remote Debugging Disabled"
+    print (ErrMes)
+    os.system('espeak "' + ErrMes + '"')
+    
 TabSTT = krom.tabs[0]
 TabSTT.set_url("https://mandliksg.000webhostapp.com")
 WelcTh.join()
