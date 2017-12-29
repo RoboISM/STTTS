@@ -55,7 +55,7 @@ while True:
         break
 
 PagSour=TabSTT.html
-STT = PagSour[PagSour.find('<span id="confm">')+17 : PagSour.find("</span><span>")]
+STT = PagSour[PagSour.find('<span id="confm">')+17 : PagSour.find("</span>")]
 krom.close_tab(TabSTT)
 print(STT)
 #os.system('espeak "' + STT + '"')
