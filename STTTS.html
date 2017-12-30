@@ -43,7 +43,7 @@ if ('webkitSpeechRecognition' in window) {
     if (confLast.toUpperCase()==stopCom)
     {
       recognition.abort();
-      confmSTT = confmSTT.substr(0, confmSTT.toUpperCase.lastIndexOf(stopCom)-1);
+      confmSTT = confmSTT.substr(0, confmSTT.toUpperCase().lastIndexOf(stopCom)-1);
       document.title = "Done";
     }
     confmSTT = capitalize(confmSTT);
