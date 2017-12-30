@@ -13,60 +13,51 @@
 
 <script type="text/javascript">
 var confmSTT = '';
-
 if ('webkitSpeechRecognition' in window) {
-
   var recognition = new webkitSpeechRecognition();
-
   recognition.continuous = true;
   recognition.interimResults = true;
-
-
   recognition.onerror = function(event) {
     console.log(event.error);
   };
-
   recognition.onresult = function(event) {
     var diceySTT = '';
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       word = event.results[i][0].transcript;
       if (event.results[i].isFinal) {
         confmSTT += word;
-      } 
+       } 
       else {
         diceySTT += word;
       }
     }
-    var confWords = confmSTT.split(" ");
-    var confLast = confWords[confWords.length - 1];
-    if (confLast.toUpperCase()==stopCom)
-    {
-      recognition.abort();
-      confmSTT = confmSTT.substr(0, confmSTT.toUpperCase().lastIndexOf(stopCom)-1);
-      document.title = "Done";
-    }
     confmSTT = capitalize(confmSTT);
     confm.innerHTML = linebreak(confmSTT);
     dicey.innerHTML = linebreak(diceySTT);
+    var confmStop = confmSTT.toUpperCase().indexOf(stopCom.toUpperCase());
+    var diceyStop = diceySTT.toUpperCase().indexOf(stopCom.toUpperCase());
+    if (confmStop>0 || diceyStop>0){
+        recognition.abort();
+        stopMatch = new RegExp(stopCom, "i");
+        dicey.replace(stopMatch, "");
+        confm.innerHTML = linebreak(confmSTT);
+        document.title = "Done";
+      }
   };
-
   recognition.onspeechend = function(event) {
     recognition.stop();
     document.title = "Done";
   };
 }
-
 var two_line = /\n\n/g;
 var one_line = /\n/g;
-var stopCom = "LAPTOP";
+var stopCom = "FINISH";
 function linebreak(s) {
   return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
 }
-
 function capitalize(s) {
   return s.replace(s.substr(0,1), function(m) {return m.toUpperCase();});
 }
-
 function startDictation(event) {
   confmSTT = '';
   recognition.lang = 'en-IN';
