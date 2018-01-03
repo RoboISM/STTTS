@@ -9,6 +9,8 @@ from chromote import Chromote
 import os
 from time import sleep
 from threading import Thread
+from SimpleHTTPServer import SimpleHTTPRequestHandler
+from BaseHTTPServer import HTTPServer
 
 def BrowSt () :
     os.system("chromium-browser -remote-debugging-port=9222")
@@ -21,9 +23,17 @@ print ("Please Wait . . .")
 WelcTh = Thread(target=WelMes)
 WelcTh.start()
 
+ServPort = 1997
+
 os.system("jack_control start")
 os.system("sudo amixer cset numid=3 1")
 pwd = os.path.dirname(os.path.abspath(__file__))
+
+os.chdir(pwd)
+
+os.system("sudo fuser -k " + str(ServPort) + "/tcp")
+ServTh = Thread(target = HTTPServer(('', ServPort), SimpleHTTPRequestHandler).serve_forever)
+ServTh.start()
 
 BrowTh = Thread(target=BrowSt)
 BrowTh.start()
@@ -44,7 +54,7 @@ if (launchAttempts==20):
     os.system('espeak "' + ErrMes + '"')
     
 TabSTT = krom.tabs[0]
-TabSTT.set_url("https://mandliksg.000webhostapp.com")
+TabSTT.set_url("http://localhost:" + str(ServPort) + "/STTTS.html")
 WelcTh.join()
 while True:
     sleep(1)
@@ -65,3 +75,5 @@ STT = PagSour[PagSour.find('<span id="confm">')+17 : PagSour.find("</span>")]
 krom.close_tab(TabSTT)
 print(STT)
 os.system('espeak "' + STT + '"')
+os.system("sudo fuser -k " + str(ServPort) + "/tcp")
+ServTh.join()

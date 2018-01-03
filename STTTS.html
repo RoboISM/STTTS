@@ -45,7 +45,7 @@ if ('webkitSpeechRecognition' in window) {
       }
   };
   recognition.onspeechend = function(event) {
-    recognition.stop();
+    recognition.abort();
     document.title = "Done";
   };
 }
